@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>英文朗读练习 | 林雪芝 · Starlynk</title>
+<style>
+:root{--bg:#fdf2f8;--card:#fff;--primary:#a855f7;--accent:#ec4899;--text:#1e293b;--muted:#64748b;--border:#f3e8ff;--pink:#FFB5C2;--pink-deep:#D4687A;--lavender:#E8D5F5}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding-bottom:80px}
+.header{background:linear-gradient(135deg,#7c3aed 0%,#3b82f6 50%,#06b6d4 100%);color:#fff;padding:48px 24px;text-align:center;position:relative}
+.header h1{font-size:2rem;font-weight:700;margin-bottom:8px}
+.header p{opacity:.9;font-size:.95rem}
+.login-top{position:absolute;top:16px;right:20px;padding:6px 14px;border-radius:20px;font-size:.78rem;background:rgba(255,255,255,.25);color:#fff;cursor:pointer;backdrop-filter:blur(8px)}
+.container{max-width:760px;margin:0 auto;padding:32px 20px}
+.card{background:var(--card);border-radius:20px;padding:28px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card h2{font-size:1.2rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.prose-text{background:#f8fafc;border-radius:12px;padding:20px;font-size:1.05rem;line-height:2;color:#374151;font-style:italic;border-left:4px solid var(--primary);margin-bottom:16px}
+.author{text-align:right;color:var(--muted);font-size:.9rem;margin-top:-8px;margin-bottom:16px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:12px;border:none;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff}
+.btn-secondary{background:#f1f5f9;color:var(--text)}
+.btn-record{background:linear-gradient(135deg,#ef4444,#f97316);color:#fff}
+.btn-record.recording{animation:pulse-r 1s infinite}
+@keyframes pulse-r{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}50%{box-shadow:0 0 0 12px rgba(239,68,68,0)}}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-group{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+.audio-player{width:100%;margin:12px 0;border-radius:8px}
+.score-display{text-align:center;padding:32px}
+.score-circle{width:120px;height:120px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:2.5rem;font-weight:800;color:#fff;margin-bottom:16px}
+.score-excellent{background:linear-gradient(135deg,#10b981,#059669)}
+.score-good{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+.score-fair{background:linear-gradient(135deg,#f59e0b,#d97706)}
+.score-poor{background:linear-gradient(135deg,#ef4444,#dc2626)}
+.score-label{font-size:1.3rem;font-weight:700;margin-bottom:8px}
+.score-detail{color:var(--muted);font-size:.9rem;line-height:1.8}
+.metric-bar{display:flex;align-items:center;gap:12px;margin:8px 0}
+.metric-label{width:80px;font-size:.85rem;color:var(--muted);text-align:right}
+.metric-track{flex:1;height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden}
+.metric-fill{height:100%;border-radius:4px;transition:width .5s}
+.metric-value{width:40px;font-size:.85rem;font-weight:600}
+.search-input{width:100%;padding:10px 16px;border:2px solid var(--border);border-radius:12px;font-size:.9rem;outline:none;margin-bottom:12px}
+.search-input:focus{border-color:var(--primary)}
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.filter-btn{padding:6px 14px;border-radius:20px;font-size:.8rem;border:2px solid var(--border);background:#fff;cursor:pointer;transition:all .2s}
+.filter-btn.active{border-color:var(--primary);background:#f5f3ff;color:var(--primary);font-weight:600}
+.prose-selector{display:flex;gap:8px;flex-wrap:wrap}
+.prose-chip{padding:6px 14px;border-radius:20px;font-size:.82rem;border:2px solid var(--border);background:#fff;cursor:pointer;transition:all .2s}
+.prose-chip.active{border-color:var(--primary);background:#f5f3ff;color:var(--primary);font-weight:600}
+.level-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:600}
+.level-beginner{background:#d1fae5;color:#065f46}
+.level-intermediate{background:#dbeafe;color:#1e40af}
+.level-advanced{background:#fce7f3;color:#9d174d}
+.tip-box{background:linear-gradient(135deg,#eff6ff,#f0fdf4);border-left:4px solid #3b82f6;padding:14px 18px;border-radius:0 12px 12px 0;font-size:.88rem;margin:12px 0}
+.voice-selector{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.voice-chip{padding:8px 14px;border-radius:12px;font-size:.82rem;border:2px solid var(--border);background:#fff;cursor:pointer;transition:all .2s}
+.voice-chip.active{border-color:var(--primary);background:#f5f3ff;color:var(--primary);font-weight:600}
+.hidden{display:none!important}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-top:1px solid rgba(232,213,245,.5);display:flex;justify-content:center;padding:6px 0;z-index:1000;box-shadow:0 -2px 16px rgba(0,0,0,.04)}
+.bottom-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:var(--muted);padding:6px 14px;border-radius:12px;font-size:.68rem;transition:all .2s}
+.bottom-nav a .nav-icon{font-size:1.3rem}
+.bottom-nav a:hover{color:var(--pink-deep);background:rgba(255,181,194,.1)}
+.bottom-nav a.active{color:var(--pink-deep)}
+@media(max-width:600px){.header{padding:36px 16px}.header h1{font-size:1.6rem}.card{padding:20px}.btn-group{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="login-top" onclick="document.getElementById('authOv').classList.remove('hidden')">👤 登录</div>
+  <h1>📖 英文朗读练习</h1>
+  <p>经典美文 · AI 发音示范 · 智能评分</p>
+</div>
+
+<!-- Auth Modal -->
+<div id="authOv" class="hidden" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)" onclick="if(event.target===this)this.classList.add('hidden')">
+  <div style="background:#fff;border-radius:20px;padding:32px;max-width:400px;width:90%;text-align:center">
+    <h3 style="color:var(--primary);margin-bottom:12px">📧 登录 / 注册</h3>
+    <input id="authEmail" type="email" placeholder="your@email.com" style="width:100%;padding:12px;border:2px solid var(--border);border-radius:12px;margin-bottom:8px;font-size:.95rem">
+    <input id="authPass" type="password" placeholder="设置密码（至少6位）" style="width:100%;padding:12px;border:2px solid var(--border);border-radius:12px;margin-bottom:12px;font-size:.95rem">
+    <button onclick="doAuth()" style="width:100%;padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;font-size:1rem;font-weight:600;cursor:pointer">进入</button>
+    <p style="color:var(--muted);font-size:.82rem;margin-top:8px">登录可保存学习进度（可选）</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Search & Filter -->
+  <div class="card">
+    <h2>🔍 搜索 & 筛选</h2>
+    <input type="text" class="search-input" id="searchInput" placeholder="搜索标题、作者或关键词..." oninput="doFilter()">
+    <div class="filter-bar">
+      <button class="filter-btn active" data-f="all" onclick="setLF('all',this)">全部</button>
+      <button class="filter-btn" data-f="Beginner" onclick="setLF('Beginner',this)">🟢 入门</button>
+      <button class="filter-btn" data-f="Intermediate" onclick="setLF('Intermediate',this)">🔵 进阶</button>
+      <button class="filter-btn" data-f="Advanced" onclick="setLF('Advanced',this)">🔴 高级</button>
+    </div>
+    <div class="filter-bar">
+      <button class="filter-btn" data-c="literature" onclick="setCF('literature',this)">📚 文学</button>
+      <button class="filter-btn" data-c="philosophy" onclick="setCF('philosophy',this)">💭 哲学</button>
+      <button class="filter-btn" data-c="speech" onclick="setCF('speech',this)">🎤 演讲</button>
+      <button class="filter-btn" data-c="science" onclick="setCF('science',this)">🔬 科学</button>
+      <button class="filter-btn" data-c="poetry" onclick="setCF('poetry',this)">🎭 诗歌</button>
+      <button class="filter-btn" data-c="business" onclick="setCF('business',this)">💼 商务</button>
+    </div>
+  </div>
+
+  <!-- Prose Selection -->
+  <div class="card">
+    <h2>📚 选择一篇美文</h2>
+    <div class="prose-selector" id="proseSelector"><div class="prose-chip" data-idx="0" data-level="Intermediate" data-cat="philosophy" onclick="selectProse(0)">Self-Reliance <span class="level-badge level-intermediate">Intermediate</span></div>
+<div class="prose-chip" data-idx="1" data-level="Advanced" data-cat="literature" onclick="selectProse(1)">Wuthering Heights <span class="level-badge level-advanced">Advanced</span></div>
+<div class="prose-chip" data-idx="2" data-level="Advanced" data-cat="philosophy" onclick="selectProse(2)">Walden <span class="level-badge level-advanced">Advanced</span></div>
+<div class="prose-chip" data-idx="3" data-level="Intermediate" data-cat="literature" onclick="selectProse(3)">The Great Gatsby <span class="level-badge level-intermediate">Intermediate</span></div>
+<div class="prose-chip" data-idx="4" data-level="Beginner" data-cat="literature" onclick="selectProse(4)">Pride and Prejudice <span class="level-badge level-beginner">Beginner</span></div>
+<div class="prose-chip" data-idx="5" data-level="Beginner" data-cat="literature" onclick="selectProse(5)">The Little Prince <span class="level-badge level-beginner">Beginner</span></div>
+<div class="prose-chip" data-idx="6" data-level="Beginner" data-cat="literature" onclick="selectProse(6)">1984 <span class="level-badge level-beginner">Beginner</span></div>
+<div class="prose-chip" data-idx="7" data-level="Advanced" data-cat="literature" onclick="selectProse(7)">Hamlet <span class="level-badge level-advanced">Advanced</span></div>
+<div class="prose-chip" data-idx="8" data-level="Intermediate" data-cat="speech" onclick="selectProse(8)">I Have a Dream <span class="level-badge level-intermediate">Intermediate</span></div>
+<div class="prose-chip" data-idx="9" data-level="Intermediate" data-cat="speech" onclick="selectProse(9)">Gettysburg Address <span class="level-badge level-intermediate">Intermediate</span></div>
+<div class="prose-chip" data-idx="10" data-level="Beginner" data-cat="speech" onclick="selectProse(10)">Stanford Commencement <span class="level-badge level-beginner">Beginner</span></div>
+<div class="prose-chip" data-idx="11" data-level="Advanced" data-cat="literature" onclick="selectProse(11)">Frankenstein <span class="level-badge level-advanced">Advanced</span></div>
+<div class="prose-chip" data-idx="12" data-level="Advanced" data-cat="science" onclick="selectProse(12)">Origin of Species <span class="level-badge level-advanced">Advanced</span></div>
+<div class="prose-chip" data-idx="13" data-level="Intermediate" data-cat="science" onclick="selectProse(13)">A Brief History of Time <span class="level-badge level-intermediate">Intermediate</span></div>
+<div class="prose-chip" data-idx="14" data-level="Beginner" data-cat="poetry" onclick="selectProse(14)">The Road Not Taken <span class="level-badge level-beginner">Beginner</span></div>
+<div class="prose-chip" data-idx="15" data-level="Intermediate" data-cat="poetry" onclick="selectProse(15)">Sonnet 18 <span class="level-badge level-intermediate">Intermediate</span></div>
+<div class="prose-chip" data-idx="16" data-level="Intermediate" data-cat="poetry" onclick="selectProse(16)">If— <span class="level-badge level-intermediate">Intermediate</span></div>
+<div class="prose-chip" data-idx="17" data-level="Intermediate" data-cat="philosophy" onclick="selectProse(17)">Meditations <span class="level-badge level-intermediate">Intermediate</span></div>
+<div class="prose-chip" data-idx="18" data-level="Beginner" data-cat="philosophy" onclick="selectProse(18)">Nicomachean Ethics <span class="level-badge level-beginner">Beginner</span></div>
+<div class="prose-chip" data-idx="19" data-level="Beginner" data-cat="philosophy" onclick="selectProse(19)">The Art of War <span class="level-badge level-beginner">Beginner</span></div>
+<div class="prose-chip" data-idx="20" data-level="Intermediate" data-cat="speech" onclick="selectProse(20)">Declaration of Independence <span class="level-badge level-intermediate">Intermediate</span></div>
+<div class="prose-chip" data-idx="21" data-level="Advanced" data-cat="speech" onclick="selectProse(21)">Letter from Birmingham Jail <span class="level-badge level-advanced">Advanced</span></div>
+<div class="prose-chip" data-idx="22" data-level="Beginner" data-cat="business" onclick="selectProse(22)">Think and Grow Rich <span class="level-badge level-beginner">Beginner</span></div>
+<div class="prose-chip" data-idx="23" data-level="Beginner" data-cat="business" onclick="selectProse(23)">How to Win Friends <span class="level-badge level-beginner">Beginner</span></div>
+<div class="prose-chip" data-idx="24" data-level="Intermediate" data-cat="science" onclick="selectProse(24)">Sapiens <span class="level-badge level-intermediate">Intermediate</span></div>
+<div class="prose-chip" data-idx="25" data-level="Intermediate" data-cat="literature" onclick="selectProse(25)">To Kill a Mockingbird <span class="level-badge level-intermediate">Intermediate</span></div>
+<div class="prose-chip" data-idx="26" data-level="Advanced" data-cat="literature" onclick="selectProse(26)">Brave New World <span class="level-badge level-advanced">Advanced</span></div>
+<div class="prose-chip" data-idx="27" data-level="Beginner" data-cat="science" onclick="selectProse(27)">Cosmos <span class="level-badge level-beginner">Beginner</span></div></div>
+  </div>
+
+  <!-- Reading Area -->
+  <div class="card">
+    <h2>📝 朗读文本</h2>
+    <div class="prose-text" id="proseText"></div>
+    <div class="author" id="proseAuthor"></div>
+    <div class="tip-box">💡 <strong>Tips:</strong> 先听 AI 示范，注意连读、重音和语调。然后点击录音按钮，大声朗读一遍。</div>
+  </div>
+
+  <!-- AI Audio -->
+  <div class="card">
+    <h2>🎙 AI 发音示范</h2>
+    <p style="color:var(--muted);font-size:.88rem;margin-bottom:12px">选择口音和声音</p>
+    <div class="voice-selector">
+      <div class="voice-chip active" data-v="british-f" onclick="setVoice(this)">🇬🇧 英式 女</div>
+      <div class="voice-chip" data-v="british-m" onclick="setVoice(this)">🇬🇧 英式 男</div>
+      <div class="voice-chip" data-v="american-f" onclick="setVoice(this)">🇺🇸 美式 女</div>
+      <div class="voice-chip" data-v="american-m" onclick="setVoice(this)">🇺🇸 美式 男</div>
+    </div>
+    <audio id="aiAudio" class="audio-player" controls></audio>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="playAI()">▶ 播放示范</button>
+      <button class="btn btn-secondary" onclick="playAI()">🔄 重新生成</button>
+    </div>
+  </div>
+
+  <!-- Recording -->
+  <div class="card">
+    <h2>🎤 我的朗读</h2>
+    <p style="color:var(--muted);font-size:.88rem;margin-bottom:12px">点击录音，朗读上面的文本</p>
+    <div class="btn-group">
+      <button class="btn btn-record" id="btnRec" onclick="toggleRec()">🎤 开始录音</button>
+      <button class="btn btn-secondary" id="btnPlay" onclick="playMine()" disabled>▶ 播放我的录音</button>
+      <button class="btn btn-primary" id="btnScore" onclick="doScore()" disabled>📊 评分</button>
+    </div>
+    <audio id="myAudio" class="audio-player hidden" controls></audio>
+    <p id="status" style="color:var(--muted);font-size:.82rem;margin-top:8px"></p>
+  </div>
+
+  <!-- Score -->
+  <div class="card hidden" id="scoreCard">
+    <h2>📊 评分结果</h2>
+    <div class="score-display">
+      <div class="score-circle" id="scCircle">-</div>
+      <div class="score-label" id="scLabel">等待评分</div>
+      <div class="score-detail" id="scDetail"></div>
+    </div>
+    <div id="metricsBars"></div>
+  </div>
+
+</div>
+
+<nav class="bottom-nav">
+  <a href="/"><span class="nav-icon">🏠</span>主页</a>
+  <a href="/psychology-feed.html"><span class="nav-icon">🧠</span>心理动态</a>
+  <a href="/training.html"><span class="nav-icon">📖</span>训练</a>
+  <a href="/english-reading.html" class="active"><span class="nav-icon">🗣️</span>英语</a>
+  <a href="/sitemap.html"><span class="nav-icon">🗺️</span>地图</a>
+</nav>
+
+<script>
+var PC = [
+  {id:'self-reliance',title:'Self-Reliance',author:'Ralph Waldo Emerson',text:'To believe your own thought, to believe that what is true for you in your private heart is true for all men, that is genius. Speak your latent conviction, and it shall be the universal sense.',level:'Intermediate',cat:'philosophy'},
+  {id:'wuthering-heights',title:'Wuthering Heights',author:'Emily Brontë',text:'He is more myself than I am. Whatever our souls are made of, his and mine are the same.',level:'Advanced',cat:'literature'},
+  {id:'walden',title:'Walden',author:'Henry David Thoreau',text:'I went to the woods because I wished to live deliberately, to front only the essential facts of life, and see if I could not learn what it had to teach, and not, when I came to die, discover that I had not lived.',level:'Advanced',cat:'philosophy'},
+  {id:'great-gatsby',title:'The Great Gatsby',author:'F. Scott Fitzgerald',text:'In my younger and more vulnerable years my father gave me some advice that I have been turning over in my mind ever since. Whenever you feel like criticizing anyone, just remember that all the people in this world have not had the advantages that you have had.',level:'Intermediate',cat:'literature'},
+  {id:'pride-prejudice',title:'Pride and Prejudice',author:'Jane Austen',text:'It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.',level:'Beginner',cat:'literature'},
+  {id:'little-prince',title:'The Little Prince',author:'Antoine de Saint-Exupéry',text:'One sees clearly only with the heart. Anything essential is invisible to the eyes.',level:'Beginner',cat:'literature'},
+  {id:'1984',title:'1984',author:'George Orwell',text:'War is peace. Freedom is slavery. Ignorance is strength. Big Brother is watching you.',level:'Beginner',cat:'literature'},
+  {id:'hamlet',title:'Hamlet',author:'William Shakespeare',text:'To be, or not to be, that is the question. Whether tis nobler in the mind to suffer the slings and arrows of outrageous fortune, or to take arms against a sea of troubles, and by opposing end them.',level:'Advanced',cat:'literature'},
+  {id:'i-have-a-dream',title:'I Have a Dream',author:'Martin Luther King Jr.',text:'I have a dream that my four little children will one day live in a nation where they will not be judged by the color of their skin but by the content of their character.',level:'Intermediate',cat:'speech'},
+  {id:'gettysburg',title:'Gettysburg Address',author:'Abraham Lincoln',text:'Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.',level:'Intermediate',cat:'speech'},
+  {id:'steve-jobs',title:'Stanford Commencement',author:'Steve Jobs',text:'Your time is limited, so don\'t waste it living someone else\'s life. Don\'t be trapped by dogma, which is living with the results of other people\'s thinking.',level:'Beginner',cat:'speech'},
+  {id:'frankenstein',title:'Frankenstein',author:'Mary Shelley',text:'I am malicious and miserable because I am wretched. Be not merciful to me, but fulfill my wishes.',level:'Advanced',cat:'literature'},
+  {id:'origin-species',title:'Origin of Species',author:'Charles Darwin',text:'There is grandeur in this view of life, with its several powers, having been originally breathed into a few forms or into one; and that, whilst this planet has gone cycling on according to the fixed law of gravity, from so simple a beginning endless forms most beautiful and most wonderful have been, and are being, evolved.',level:'Advanced',cat:'science'},
+  {id:'brief-history',title:'A Brief History of Time',author:'Stephen Hawking',text:'Even if there is only one possible unified theory, it is just a set of rules and equations. What is it that breathes fire into the equations and makes a universe for them to describe?',level:'Intermediate',cat:'science'},
+  {id:'road-not-taken',title:'The Road Not Taken',author:'Robert Frost',text:'Two roads diverged in a wood, and I took the one less traveled by, and that has made all the difference.',level:'Beginner',cat:'poetry'},
+  {id:'sonnet-18',title:'Sonnet 18',author:'William Shakespeare',text:'Shall I compare thee to a summer\'s day? Thou art more lovely and more temperate. Rough winds do shake the darling buds of May, and summer\'s lease hath all too short a date.',level:'Intermediate',cat:'poetry'},
+  {id:'if',title:'If—',author:'Rudyard Kipling',text:'If you can keep your head when all about you are losing theirs and blaming it on you; if you can trust yourself when all men doubt you, but make allowance for their doubting too.',level:'Intermediate',cat:'poetry'},
+  {id:'meditations',title:'Meditations',author:'Marcus Aurelius',text:'The happiness of your life depends upon the quality of your thoughts: therefore, guard accordingly, and take care that you entertain no notions unsuitable to virtue and reasonable nature.',level:'Intermediate',cat:'philosophy'},
+  {id:'nicomachean',title:'Nicomachean Ethics',author:'Aristotle',text:'We are what we repeatedly do. Excellence, then, is not an act, but a habit.',level:'Beginner',cat:'philosophy'},
+  {id:'art-of-war',title:'The Art of War',author:'Sun Tzu',text:'Appear weak when you are strong, and strong when you are weak. The supreme art of war is to subdue the enemy without fighting.',level:'Beginner',cat:'philosophy'},
+  {id:'declaration',title:'Declaration of Independence',author:'Thomas Jefferson',text:'We hold these truths to be self-evident, that all men are created equal, that they are endowed by their Creator with certain unalienable Rights, that among these are Life, Liberty and the pursuit of Happiness.',level:'Intermediate',cat:'speech'},
+  {id:'letter-birmingham',title:'Letter from Birmingham Jail',author:'Martin Luther King Jr.',text:'Injustice anywhere is a threat to justice everywhere. We are caught in an inescapable network of mutuality, tied in a single garment of destiny.',level:'Advanced',cat:'speech'},
+  {id:'think-grow',title:'Think and Grow Rich',author:'Napoleon Hill',text:'Whatever the mind of man can conceive and believe, it can achieve. Thoughts are things, and powerful things at that when mixed with definiteness of purpose.',level:'Beginner',cat:'business'},
+  {id:'how-win-friends',title:'How to Win Friends',author:'Dale Carnegie',text:'You can make more friends in two months by becoming interested in other people than you can in two years by trying to get other people interested in you.',level:'Beginner',cat:'business'},
+  {id:'sapiens',title:'Sapiens',author:'Yuval Noah Harari',text:'The real difference between us and chimpanzees is the mysterious glue that enables millions of humans to cooperate effectively. This mythical glue is made of stories, not genes.',level:'Intermediate',cat:'science'},
+  {id:'to-kill-mockingbird',title:'To Kill a Mockingbird',author:'Harper Lee',text:'You never really understand a person until you consider things from his point of view, until you climb into his skin and walk around in it.',level:'Intermediate',cat:'literature'},
+  {id:'brave-new-world',title:'Brave New World',author:'Aldous Huxley',text:'Words can be like X-rays if you use them properly — they\'ll go through anything. You read and you\'re pierced.',level:'Advanced',cat:'literature'},
+  {id:'cosmos',title:'Cosmos',author:'Carl Sagan',text:'The cosmos is within us. We are made of star-stuff. We are a way for the universe to know itself.',level:'Beginner',cat:'science'}
+];
+var curProse = null, curVoice = 'british-f', curLF = 'all', curCF = null;
+var mediaRec = null, audioChunks = [], isRec = false, myBlob = null;
+
+function selectProse(i) {
+  var chips = document.querySelectorAll('.prose-chip');
+  var visible = [];
+  for (var c = 0; c < chips.length; c++) {
+    if (chips[c].style.display !== 'none') visible.push(chips[c]);
+  }
+  for (var c = 0; c < visible.length; c++) visible[c].className = 'prose-chip';
+  if (visible[i]) visible[i].className = 'prose-chip active';
+  
+  var idx = parseInt(visible[i] ? visible[i].getAttribute('data-idx') : i);
+  curProse = PC[idx];
+  document.getElementById('proseText').innerHTML = '"' + curProse.text + '"';
+  document.getElementById('proseAuthor').textContent = '— ' + curProse.author + ', ' + curProse.title;
+  document.getElementById('aiAudio').src = '';
+  document.getElementById('myAudio').className = 'audio-player hidden';
+  document.getElementById('scoreCard').className = 'card hidden';
+  document.getElementById('btnScore').disabled = true;
+  document.getElementById('btnPlay').disabled = true;
+  document.getElementById('status').textContent = '';
+  myBlob = null;
+}
+
+function setVoice(el) {
+  var chips = document.querySelectorAll('.voice-chip');
+  for (var c = 0; c < chips.length; c++) chips[c].className = 'voice-chip';
+  el.className = 'voice-chip active';
+  curVoice = el.getAttribute('data-v');
+  document.getElementById('aiAudio').src = '';
+}
+
+function playAI() {
+  if (!curProse) { selectProse(0); }
+  var url = '/audio/english/' + curProse.id + '_' + curVoice + '.mp3?v=' + Date.now();
+  document.getElementById('aiAudio').src = url;
+  document.getElementById('aiAudio').play();
+}
+
+function setLF(level, btn) {
+  curLF = level;
+  var btns = document.querySelectorAll('.filter-btn[data-f]');
+  for (var b = 0; b < btns.length; b++) btns[b].className = 'filter-btn';
+  btn.className = 'filter-btn active';
+  doFilter();
+}
+
+function setCF(cat, btn) {
+  if (curCF === cat) { curCF = null; btn.className = 'filter-btn'; }
+  else {
+    curCF = cat;
+    var btns = document.querySelectorAll('.filter-btn[data-c]');
+    for (var b = 0; b < btns.length; b++) btns[b].className = 'filter-btn';
+    btn.className = 'filter-btn active';
+  }
+  doFilter();
+}
+
+function doFilter() {
+  var q = document.getElementById('searchInput').value.toLowerCase();
+  var chips = document.querySelectorAll('.prose-chip');
+  var visIdx = 0;
+  for (var c = 0; c < chips.length; c++) {
+    var idx = parseInt(chips[c].getAttribute('data-idx'));
+    var p = PC[idx];
+    var show = true;
+    if (curLF !== 'all' && p.level !== curLF) show = false;
+    if (curCF && p.cat !== curCF) show = false;
+    if (q && p.title.toLowerCase().indexOf(q) < 0 && p.author.toLowerCase().indexOf(q) < 0 && p.text.toLowerCase().indexOf(q) < 0) show = false;
+    chips[c].style.display = show ? '' : 'none';
+    if (show) {
+      chips[c].onclick = (function(ii) { return function() { selectProse(ii); }; })(visIdx);
+      visIdx++;
+    }
+  }
+}
+
+async function toggleRec() {
+  var btn = document.getElementById('btnRec');
+  var st = document.getElementById('status');
+  if (!isRec) {
+    try {
+      var stream = await navigator.mediaDevices.getUserMedia({audio:true});
+      mediaRec = new MediaRecorder(stream, {mimeType:'audio/webm'});
+      audioChunks = [];
+      mediaRec.ondataavailable = function(e) { if (e.data.size > 0) audioChunks.push(e.data); };
+      mediaRec.onstop = function() {
+        myBlob = new Blob(audioChunks, {type:'audio/webm'});
+        document.getElementById('myAudio').src = URL.createObjectURL(myBlob);
+        document.getElementById('myAudio').className = 'audio-player';
+        document.getElementById('btnPlay').disabled = false;
+        document.getElementById('btnScore').disabled = false;
+        stream.getTracks().forEach(function(t){t.stop();});
+      };
+      mediaRec.start();
+      isRec = true;
+      btn.textContent = '⏹ 停止录音';
+      btn.classList.add('recording');
+      st.textContent = '🔴 正在录音... 请朗读上方文本';
+    } catch(e) { st.textContent = '❌ 无法访问麦克风'; }
+  } else {
+    mediaRec.stop();
+    isRec = false;
+    btn.textContent = '🎤 重新录音';
+    btn.classList.remove('recording');
+    st.textContent = '✅ 录音完成！可以播放或评分';
+  }
+}
+
+function playMine() { document.getElementById('myAudio').play(); }
+
+async function doScore() {
+  if (!curProse || !myBlob) return;
+  var sc = document.getElementById('scoreCard');
+  sc.className = 'card';
+  document.getElementById('scCircle').textContent = '...';
+  document.getElementById('scLabel').textContent = 'Whisper 分析中...';
+  document.getElementById('scDetail').textContent = '正在用 AI 识别你的朗读内容...';
+  document.getElementById('metricsBars').innerHTML = '';
+  try {
+    var fd = new FormData();
+    fd.append('audio', myBlob, 'rec.webm');
+    fd.append('reference', curProse.text);
+    var resp = await fetch('/api/score', {method:'POST', body:fd});
+    if (!resp.ok) throw new Error('API error ' + resp.status);
+    var r = await resp.json();
+    if (r.error) throw new Error(r.error);
+    var circle = document.getElementById('scCircle');
+    circle.textContent = r.overall;
+    if (r.overall >= 85) { circle.className = 'score-circle score-excellent'; document.getElementById('scLabel').textContent = '🌟 Excellent!'; }
+    else if (r.overall >= 70) { circle.className = 'score-circle score-good'; document.getElementById('scLabel').textContent = '👍 Good Job!'; }
+    else if (r.overall >= 55) { circle.className = 'score-circle score-fair'; document.getElementById('scLabel').textContent = '💪 Keep Practicing'; }
+    else { circle.className = 'score-circle score-poor'; document.getElementById('scLabel').textContent = '📚 Try Again'; }
+    var wh = '<div style="margin:16px 0;padding:16px;background:#f8fafc;border-radius:12px;font-size:.95rem;line-height:2.2">';
+    for (var w = 0; w < r.words.length; w++) {
+      if (r.words[w].status === 'correct') wh += '<span style="background:#d1fae5;color:#065f46;padding:2px 6px;border-radius:4px;margin:2px">' + r.words[w].word + '</span> ';
+      else if (r.words[w].status === 'wrong') wh += '<span style="background:#fee2e2;color:#991b1b;padding:2px 6px;border-radius:4px;margin:2px;text-decoration:line-through">' + r.words[w].word + '</span> ';
+      else wh += '<span style="background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:4px;margin:2px;opacity:.6">' + r.words[w].word + '</span> ';
+    }
+    wh += '</div>';
+    document.getElementById('scDetail').innerHTML = '<div style="margin:12px 0;padding:12px;background:#f0f9ff;border-radius:10px;font-size:.88rem"><strong>🎤 Whisper：</strong><em style="color:#1e40af">"' + r.transcribed + '"</em></div>' + wh;
+    document.getElementById('metricsBars').innerHTML = '<div class="metric-bar"><span class="metric-label">Accuracy</span><div class="metric-track"><div class="metric-fill" style="width:' + r.word_accuracy + '%;background:#7c3aed"></div></div><span class="metric-value" style="color:#7c3aed">' + r.word_accuracy + '%</span></div><div class="metric-bar"><span class="metric-label">Complete</span><div class="metric-track"><div class="metric-fill" style="width:' + r.completeness + '%;background:#3b82f6"></div></div><span class="metric-value" style="color:#3b82f6">' + r.completeness + '%</span></div>';
+  } catch(e) {
+    document.getElementById('scLabel').textContent = '❌ 评分失败';
+    document.getElementById('scDetail').innerHTML = '<span style="color:#ef4444">' + e.message + '</span>';
+  }
+  sc.scrollIntoView({behavior:'smooth'});
+}
+
+function doAuth() {
+  var email = document.getElementById('authEmail').value.trim();
+  var pass = document.getElementById('authPass').value;
+  if (!email || !email.includes('@')) { alert('请输入有效邮箱'); return; }
+  if (pass.length < 6) { alert('密码至少6位'); return; }
+  var users = JSON.parse(localStorage.getItem('er_users') || '{}');
+  if (users[email]) { if (users[email].p !== pass) { alert('密码错误'); return; } }
+  else { users[email] = {p:pass, c:new Date().toISOString()}; localStorage.setItem('er_users', JSON.stringify(users)); }
+  localStorage.setItem('er_user', JSON.stringify({email:email}));
+  document.getElementById('authOv').className = 'hidden';
+  document.querySelector('.login-top').textContent = '✅ ' + email.split('@')[0];
+}
+
+// Init: select first prose
+(function(){
+  var u = null;
+  try { u = JSON.parse(localStorage.getItem('er_user')); } catch(e) {}
+  if (u) document.querySelector('.login-top').textContent = '✅ ' + u.email.split('@')[0];
+  selectProse(0);
+})();
+</script>
+</body>
+</html>

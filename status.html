@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>系统状态 | 三号员工 · Starlynk</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; color: #1a1a2e; background: #fafafa; line-height: 1.8; }
+  .navbar { position: sticky; top: 0; background: #0f0f23; padding: 0 24px; display: flex; align-items: center; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); overflow-x: auto; white-space: nowrap; }
+  .navbar a { color: #9ca3af; text-decoration: none; padding: 14px 14px; font-size: 0.85rem; transition: color 0.2s, background 0.2s; border-bottom: 2px solid transparent; flex-shrink: 0; }
+  .navbar a:hover { color: #fff; background: rgba(255,255,255,0.05); }
+  .navbar a.active { color: #d4a017; border-bottom-color: #d4a017; }
+  .navbar .brand { color: #d4a017; font-weight: 700; font-size: 1rem; margin-right: auto; }
+  .container { max-width: 720px; margin: 0 auto; padding: 48px 24px 120px; }
+  h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; color: #0f0f23; }
+  .subtitle { font-size: 1.05rem; color: #6b7280; margin-bottom: 48px; }
+  .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+  .stat-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f3f4f6; }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { color: #6b7280; }
+  .stat-value { font-weight: 600; }
+  .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .dot-green { background: #22c55e; }
+  .dot-yellow { background: #eab308; }
+  footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid #e5e7eb; font-size: 0.85rem; color: #9ca3af; }
+  a { color: #2563eb; text-decoration: none; }
+</style>
+<style>
+:root {
+  --pink: #FFB5C2;
+  --pink-deep: #D4687A;
+  --lavender: #E8D5F5;
+  --mint: #B5EAD7;
+  --bg: #FFF8FA;
+  --text: #2D2D2D;
+  --text-light: #8A8A8A;
+  --card-bg: #FFFFFF;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, 'SF Pro Display', 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding-bottom: 80px; }
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(232,213,245,0.5);
+  display: flex; justify-content: center; gap: 0;
+  padding: 6px 0 max(6px, env(safe-area-inset-bottom));
+  z-index: 1000;
+  box-shadow: 0 -2px 16px rgba(0,0,0,0.04);
+}
+.bottom-nav a {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  text-decoration: none; color: var(--text-light);
+  padding: 6px 14px; border-radius: 12px; font-size: 0.68rem;
+  transition: all 0.2s; flex-shrink: 0;
+}
+.bottom-nav a .nav-icon { font-size: 1.3rem; }
+.bottom-nav a:hover { color: var(--pink-deep); background: rgba(255,181,194,0.1); }
+.bottom-nav a.active { color: var(--pink-deep); }
+.bottom-nav a.psy-link { position: relative; }
+.bottom-nav a.psy-link::after {
+  content: ''; position: absolute; top: 2px; right: 8px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #10b981; animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+</style>
+</head>
+<body>
+<div id="pwd-gate" style="position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+  <div style="font-size:3rem;">🔒</div>
+  <h2 style="color:var(--pink-deep);font-size:1.2rem;">需要密码访问</h2>
+  <div style="display:flex;gap:8px;">
+    <input type="password" id="pwd-input" placeholder="请输入密码" style="padding:10px 16px;border:2px solid var(--lavender);border-radius:12px;font-size:1rem;outline:none;width:200px;" onkeypress="if(event.key==='Enter')checkPwd()">
+    <button onclick="checkPwd()" style="padding:10px 20px;background:var(--pink);border:none;border-radius:12px;color:white;font-size:0.9rem;cursor:pointer;">进入</button>
+  </div>
+  <p id="pwd-error" style="color:#ef4444;font-size:0.8rem;display:none;">密码错误，请重试</p>
+</div>
+<script>
+(function(){
+  var key='site_pwd_ok';
+  if(sessionStorage.getItem(key)){document.getElementById('pwd-gate').style.display='none';return;}
+  document.getElementById('pwd-input').focus();
+  window.checkPwd=function(){
+    if(document.getElementById('pwd-input').value==='866568xx!'){
+      sessionStorage.setItem(key,'1');
+      document.getElementById('pwd-gate').style.display='none';
+    }else{
+      document.getElementById('pwd-error').style.display='block';
+      document.getElementById('pwd-input').value='';
+      document.getElementById('pwd-input').focus();
+    }
+  };
+})();
+</script>
+<nav class="navbar">
+  <a href="/" class="brand">★ 三号员工</a>
+  <a href="/"><span class="t-zh">首页</span><span class="t-en">Home</span></a>
+  <a href="/tasks.html">任务 Tasks</a>
+  <a href="/status.html" class="active">状态 Status</a>
+</nav>
+<div class="container">
+  <h1>⚡ 系统状态</h1>
+  <p class="subtitle">三号员工运行状态监控 · System Status Monitor</p>
+
+  <div class="card">
+    <h3 style="margin-bottom:16px;">🤖 Agent 状态</h3>
+    <div class="stat-row">
+      <span class="stat-label">服务状态</span>
+      <span class="stat-value"><span class="status-dot dot-green"></span>运行中</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">配置文件</span>
+      <span class="stat-value">hermersluis3</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">AI 模型</span>
+      <span class="stat-value">xiaomi/mimo-v2-pro</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">API Provider</span>
+      <span class="stat-value">OpenRouter</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Telegram Bot</span>
+      <span class="stat-value">@HermesLuis3bot</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:16px;">🖥 服务器</h3>
+    <div class="stat-row">
+      <span class="stat-label">主机</span>
+      <span class="stat-value">Vultr VPS</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">IP</span>
+      <span class="stat-value">45.76.190.83</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">OS</span>
+      <span class="stat-value">Ubuntu 24.04</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">域名</span>
+      <span class="stat-value">3.luis.amt.land</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-bottom:16px;">🔗 快速链接</h3>
+    <div class="stat-row">
+      <span class="stat-label">Telegram</span>
+      <a href="https://t.me/HermesLuis3bot" target="_blank">@HermesLuis3bot →</a>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">主页</span>
+      <a href="https://luis.amt.land" target="_blank">luis.amt.land →</a>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">二号员工</span>
+      <a href="https://2.luis.amt.land" target="_blank">2.luis.amt.land →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 <a href="https://luis.amt.land">Luis Lin</a> · Starlynk Group · 三号员工 v1.0</p>
+  </footer>
+</div>
+<nav class="bottom-nav">
+  <a href="/">
+    <span class="nav-icon">🏠</span>
+    主页
+  </a>
+  <a href="/psychology-feed.html" class="psy-link">
+    <span class="nav-icon">🧠</span>
+    心理动态
+  </a>
+  <a href="/training.html">
+    <span class="nav-icon">📖</span>
+    训练
+  </a>
+  <a href="/english-reading.html">
+    <span class="nav-icon">🗣️</span>
+    英语
+  </a>
+  <a href="/sitemap.html">
+    <span class="nav-icon">🗺️</span>
+    地图
+  </a>
+</nav>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>行业心理学动态 | 林雪芝 · Starlynk</title>
+<style>
+:root{--bg:#fdf2f8;--card:#fff;--primary:#a855f7;--accent:#ec4899;--text:#1e293b;--muted:#64748b;--border:#f3e8ff;--pink:#FFB5C2;--pink-deep:#D4687A;--green:#10b981;--gold:#f59e0b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding-bottom:80px}
+.header{background:linear-gradient(135deg,#7c3aed 0%,#a855f7 50%,#ec4899 100%);color:#fff;padding:48px 24px;text-align:center}
+.header h1{font-size:2rem;font-weight:700;margin-bottom:8px}
+.header p{opacity:.9;font-size:.95rem}
+.header .live{display:inline-block;margin-top:12px;padding:4px 14px;border-radius:16px;font-size:.78rem;background:rgba(255,255,255,.2);backdrop-filter:blur(8px)}
+.container{max-width:800px;margin:0 auto;padding:32px 20px}
+.timeline{position:relative;padding-left:32px}
+.timeline::before{content:'';position:absolute;left:12px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--primary),var(--accent),var(--primary));border-radius:1px}
+.slot{position:relative;margin-bottom:20px}
+.slot::before{content:'';position:absolute;left:-26px;top:24px;width:12px;height:12px;border-radius:50%;background:#e2e8f0;border:3px solid #fff;box-shadow:0 0 0 2px #e2e8f0;z-index:1}
+.slot.done::before{background:var(--green);box-shadow:0 0 0 2px var(--green)}
+.slot.current::before{background:var(--gold);box-shadow:0 0 0 2px var(--gold);animation:pulse-d 1.5s infinite}
+@keyframes pulse-d{0%,100%{box-shadow:0 0 0 2px var(--gold)}50%{box-shadow:0 0 0 6px rgba(245,158,11,.3)}}
+.slot-card{background:var(--card);border-radius:16px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,.06);transition:all .3s}
+.slot-card:hover{box-shadow:0 4px 20px rgba(168,85,247,.1);transform:translateY(-1px)}
+.slot-meta{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.slot-time{font-size:.85rem;font-weight:700;color:var(--primary);background:#f5f3ff;padding:4px 12px;border-radius:8px}
+.slot-num{font-size:.72rem;color:var(--muted);background:#f8fafc;padding:2px 8px;border-radius:6px}
+.slot-topic{font-size:.78rem;color:var(--accent);font-weight:600}
+.slot-title{font-size:1.05rem;font-weight:700;margin-bottom:10px}
+.slot-summary{font-size:.88rem;color:#475569;line-height:1.8;margin-bottom:12px}
+.slot-audio audio{width:100%;border-radius:8px;margin-top:8px}
+.slot-audio .label{font-size:.78rem;color:var(--muted);margin-bottom:4px}
+.slot-pending{color:var(--muted);font-size:.85rem;font-style:italic;padding:12px;background:#f8fafc;border-radius:10px;text-align:center}
+.status-bar{display:flex;gap:16px;justify-content:center;margin:20px 0;flex-wrap:wrap}
+.status-item{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:4px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.dot-g{background:var(--green)}.dot-y{background:var(--gold)}.dot-n{background:#e2e8f0}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-top:1px solid rgba(232,213,245,.5);display:flex;justify-content:center;padding:6px 0;z-index:1000;box-shadow:0 -2px 16px rgba(0,0,0,.04)}
+.bottom-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:var(--muted);padding:6px 14px;border-radius:12px;font-size:.68rem;transition:all .2s}
+.bottom-nav a .nav-icon{font-size:1.3rem}
+.bottom-nav a:hover{color:var(--pink-deep);background:rgba(255,181,194,.1)}
+.bottom-nav a.active{color:var(--pink-deep)}
+.bottom-nav a.psy-link{position:relative}
+.bottom-nav a.psy-link::after{content:'';position:absolute;top:2px;right:8px;width:6px;height:6px;border-radius:50%;background:#10b981;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@media(max-width:600px){.header{padding:36px 16px}.header h1{font-size:1.6rem}.slot-card{padding:18px}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🧠 行业心理学动态</h1>
+  <p>12个行业心理学领域 · 每小时更新 · 文字+语音</p>
+  <div class="live">实时更新中</div>
+</div>
+
+<div class="container">
+  <div class="status-bar" id="statusBar"></div>
+  <div class="timeline" id="timeline"></div>
+</div>
+
+<nav class="bottom-nav">
+  <a href="/"><span class="nav-icon">🏠</span>主页</a>
+  <a href="/psychology-feed.html" class="psy-link active"><span class="nav-icon">🧠</span>心理动态</a>
+  <a href="/training.html"><span class="nav-icon">📖</span>训练</a>
+  <a href="/english-reading.html"><span class="nav-icon">🗣️</span>英语</a>
+  <a href="/sitemap.html"><span class="nav-icon">🗺️</span>地图</a>
+</nav>
+
+<script>
+var TOPICS=[
+  {n:1,t:"08:00",topic:"法律心理学"},
+  {n:2,t:"09:00",topic:"组织行为学"},
+  {n:3,t:"10:00",topic:"消费心理学"},
+  {n:4,t:"11:00",topic:"人力资源心理学"},
+  {n:5,t:"12:00",topic:"教育心理学"},
+  {n:6,t:"13:00",topic:"健康心理学"},
+  {n:7,t:"14:00",topic:"环境心理学"},
+  {n:8,t:"15:00",topic:"运动心理学"},
+  {n:9,t:"16:00",topic:"社交媒体心理学"},
+  {n:10,t:"17:00",topic:"跨文化心理学"},
+  {n:11,t:"18:00",topic:"认知偏差与决策"},
+  {n:12,t:"19:00",topic:"积极心理学"}
+];
+
+function getHour(){
+  var now=new Date(),utc=now.getTime()+(now.getTimezoneOffset()*60000),sgt=new Date(utc+(3600000*8));
+  return sgt.getHours();
+}
+
+function render(data){
+  var ups=data.updates||[],map={};
+  for(var i=0;i<ups.length;i++){if(ups[i].slot)map[ups[i].slot]=ups[i];}
+  var h=getHour(),cur=(h>=8&&h<=19)?(h-7):0,done=0,pending=0,o="";
+  for(var i=0;i<TOPICS.length;i++){
+    var tp=TOPICS[i],u=map[tp.n],has=u&&u.summary&&u.summary.indexOf("待更新")<0&&u.summary.indexOf("定时任务")<0,hasA=u&&u.audio,isCur=tp.n===cur;
+    if(has)done++;else pending++;
+    var cls=isCur?"slot current":(has?"slot done":"slot");
+    o+='<div class="'+cls+'"><div class="slot-card"><div class="slot-meta">';
+    o+='<span class="slot-time">'+tp.t+'</span><span class="slot-num">#'+tp.n+'/12</span><span class="slot-topic">'+tp.topic+'</span>';
+    if(isCur)o+='<span style="font-size:.72rem;color:var(--gold);font-weight:600">● 当前</span>';
+    o+='</div>';
+    if(has){
+      o+='<div class="slot-title">'+u.title+'</div>';
+      var s=u.summary.replace(/(\d+\.\s)/g,"<br><strong>$1</strong>").replace(/^<br>/,"");
+      o+='<div class="slot-summary">'+s+'</div>';
+      if(hasA)o+='<div class="slot-audio"><div class="label">🔊 中文语音</div><audio controls preload="none" src="'+u.audio+'"></audio></div>';
+    }else{
+      o+='<div class="slot-pending">⏳ '+tp.t+' 自动生成（文字+语音）</div>';
+    }
+    o+='</div></div>';
+  }
+  document.getElementById("timeline").innerHTML=o;
+  document.getElementById("statusBar").innerHTML='<div class="status-item"><span class="dot dot-g"></span>已完成 '+done+'</div><div class="status-item"><span class="dot dot-y"></span>待生成 '+pending+'</div><div class="status-item"><span class="dot dot-n"></span>共 12 个领域</div>';
+}
+
+fetch("/psychology-feed.json?v="+Date.now()).then(function(r){return r.json()}).then(render).catch(function(){document.getElementById("timeline").innerHTML='<div class="slot-pending">加载失败，请刷新</div>';});
+setInterval(function(){fetch("/psychology-feed.json?v="+Date.now()).then(function(r){return r.json()}).then(render);},300000);
+</script>
+</body>
+</html>

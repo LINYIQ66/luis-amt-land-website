@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>网站地图 | 林雪芝 AI</title>
+<style>
+:root {
+  --pink: #FFB5C2;
+  --pink-deep: #D4687A;
+  --lavender: #E8D5F5;
+  --mint: #B5EAD7;
+  --bg: #FFF8FA;
+  --text: #2D2D2D;
+  --text-light: #8A8A8A;
+  --card-bg: #FFFFFF;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, 'SF Pro Display', 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding-bottom: 80px; min-height: 100vh; }
+
+.header {
+  text-align: center; padding: 40px 20px 20px;
+  background: linear-gradient(135deg, #FFF0F3, #F0E6FF, #E6FFF5);
+}
+.header h1 { font-size: 1.5rem; color: var(--pink-deep); margin-bottom: 8px; }
+.header p { color: var(--text-light); font-size: 0.85rem; }
+
+.container { max-width: 600px; margin: 0 auto; padding: 20px; }
+
+.map-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px;
+}
+
+.map-card {
+  background: var(--card-bg); border-radius: 16px; padding: 24px 20px;
+  text-decoration: none; color: var(--text);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  border: 1px solid rgba(232,213,245,0.3);
+  transition: all 0.3s; display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.map-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(212,104,122,0.12);
+  border-color: var(--pink);
+}
+.map-card .icon { font-size: 2rem; }
+.map-card .label { font-size: 0.9rem; font-weight: 600; }
+.map-card .desc { font-size: 0.72rem; color: var(--text-light); text-align: center; line-height: 1.4; }
+
+.map-card.locked {
+  position: relative; opacity: 0.6;
+}
+.map-card.locked::after {
+  content: '🔒'; position: absolute; top: 8px; right: 10px; font-size: 0.9rem;
+}
+
+.footer {
+  text-align: center; padding: 30px 20px; color: var(--text-light); font-size: 0.72rem;
+}
+
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(232,213,245,0.5);
+  display: flex; justify-content: center; gap: 0;
+  padding: 6px 0 max(6px, env(safe-area-inset-bottom));
+  z-index: 1000;
+  box-shadow: 0 -2px 16px rgba(0,0,0,0.04);
+}
+.bottom-nav a {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  text-decoration: none; color: var(--text-light);
+  padding: 6px 14px; border-radius: 12px; font-size: 0.68rem;
+  transition: all 0.2s; flex-shrink: 0;
+}
+.bottom-nav a .nav-icon { font-size: 1.3rem; }
+.bottom-nav a:hover { color: var(--pink-deep); background: rgba(255,181,194,0.1); }
+.bottom-nav a.active { color: var(--pink-deep); }
+.bottom-nav a.psy-link { position: relative; }
+.bottom-nav a.psy-link::after {
+  content: ''; position: absolute; top: 2px; right: 8px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #10b981; animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🗺️ 网站地图</h1>
+  <p>3.luis.amt.land · 林雪芝 AI 助手</p>
+</div>
+
+<div class="container">
+  <div class="map-grid">
+    <a href="/" class="map-card">
+      <span class="icon">🏠</span>
+      <span class="label">主页</span>
+      <span class="desc">个人主页 · 自我介绍 · 核心能力</span>
+    </a>
+    <a href="/psychology-feed.html" class="map-card">
+      <span class="icon">🧠</span>
+      <span class="label">心理学动态</span>
+      <span class="desc">12个行业心理学 · 每小时更新 · 中文语音</span>
+    </a>
+    <a href="/training.html" class="map-card">
+      <span class="icon">📖</span>
+      <span class="label">训练文档</span>
+      <span class="desc">AI Agent 训练数据 · 知识体系</span>
+    </a>
+    <a href="/english-reading.html" class="map-card">
+      <span class="icon">🗣️</span>
+      <span class="label">英语练习</span>
+      <span class="desc">朗读训练 · 发音评分 · Whisper AI</span>
+    </a>
+    <a href="/tasks.html" class="map-card locked" id="tasks-link">
+      <span class="icon">✅</span>
+      <span class="label">任务管理</span>
+      <span class="desc">定时任务 · Cron 状态 · 需要密码</span>
+    </a>
+    <a href="/status.html" class="map-card locked" id="status-link">
+      <span class="icon">📊</span>
+      <span class="label">系统状态</span>
+      <span class="desc">服务器监控 · 服务状态 · 需要密码</span>
+    </a>
+  </div>
+
+  <div class="footer">
+    <p>🤖 Powered by Hermes Agent · 林雪芝 (Xuezhi Lin)</p>
+    <p>Starlynk · AI × Psychology × Finance</p>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <a href="/">
+    <span class="nav-icon">🏠</span>
+    主页
+  </a>
+  <a href="/psychology-feed.html" class="psy-link">
+    <span class="nav-icon">🧠</span>
+    心理动态
+  </a>
+  <a href="/training.html">
+    <span class="nav-icon">📖</span>
+    训练
+  </a>
+  <a href="/english-reading.html">
+    <span class="nav-icon">🗣️</span>
+    英语
+  </a>
+  <a href="/sitemap.html" class="active">
+    <span class="nav-icon">🗺️</span>
+    地图
+  </a>
+</nav>
+
+</body>
+</html>
