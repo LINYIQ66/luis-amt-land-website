@@ -11,7 +11,7 @@ This repository hosts the codebase for Luis Lin's personal website and AI assist
     *   Recording functionality for user practice, with Whisper-based scoring.
     *   Optional login to save learning progress.
 *   **Site-wide Navigation:** Consistent pink/lavender/mint themed bottom navigation bar across all pages.
-*   **Password Protected Pages:** `tasks.html` and `status.html` are protected by a session-based password (`866568xx!`).
+*   **Password Protected Pages:** `tasks.html` and `status.html` are protected by a session-based password (`!`).
 *   **Sitemap:** Provides an overview of all site sections.
 *   **Static Site:** Primarily HTML, CSS, and JavaScript, served directly via Nginx without a backend server.
 *   **Cache Control:** Implemented via HTML meta tags and Nginx configuration to ensure users always see the latest version.
